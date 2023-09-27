@@ -6,7 +6,7 @@
 /*   By: apolo-to <apolo-to@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 10:41:22 by apolo-to          #+#    #+#             */
-/*   Updated: 2023/09/26 17:28:36 by apolo-to         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:41:50 by apolo-to         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,27 @@
 
 void	send_str(int pid, char *str)
 {
+	int	i;
 	(void)pid;
 	(void)str;
-	printf("%i\n", 'a' >> 4);
+	while (*str)
+	{
+		i = 8;
+		while (i-- >= 0)
+		{
+			if ((*str) >> i & 1)
+				printf("1");
+			else
+				printf("0");
+		}
+		printf(" | ");
+		str++;
+	}
+	
+	printf("\n");
+
 }
+
 
 int	main(int argc, char **argv)
 {
