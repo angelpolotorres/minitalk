@@ -5,19 +5,25 @@ END = \033[0m
 
 # Final program ---------------------------------------------- #
 # ------------------------------------------------------------ #
-NAME_CLI = client
-NAME_SER = server
+NAME_CLIENT = client
+NAME_SERVER = server
 PROJECT = minitalk
 
 # Source files ----------------------------------------------- #
 # ------------------------------------------------------------ #
-SRCS = $(SRC_FILES)
+SRCS_CLIENT = $(SRC_FILES_CLIENT)
+SRCS_SERVER = $(SRC_FILES_SERVER)
 
 SRC_DIR = src
-SRC_FILES = $(addprefix $(SRC_DIR)/, $(SRC_CFILES))
-SRC_CFILES = \
-		client.c \
-		error.c \
+SRC_FILES_CLIENT = $(addprefix $(SRC_DIR)/, $(SRC_CFILES_CLIENT))
+SRC_CFILES_CLIENT = \
+			client.c \
+			error.c \
+
+SRC_FILES_SERVER = $(addprefix $(SRC_DIR)/, $(SRC_CFILES_SERVER))
+SRC_CFILES_SERVER = \
+			server.c \
+			error.c \
 
 LIBFT_DIR =$(SRC_DIR)/libft
 PRINTF_DIR =$(SRC_DIR)/printf
@@ -25,8 +31,9 @@ GNL_DIR =$(SRC_DIR)/gnl
 
 # Object files ----------------------------------------------- #
 # ------------------------------------------------------------ #
-OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 OBJ_DIR = build
+OBJS_CLIENT = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS_CLIENT))
+OBJS_SERVER = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS_SERVER))
 
 # Compiler options ------------------------------------------- #
 # ------------------------------------------------------------ #
@@ -37,20 +44,18 @@ INCL_DIR = includes
 
 # Rules ------------------------------------------------------ #
 # ------------------------------------------------------------ #
-all: $(NAME_CLI) $(NAME_SER)
+all: $(NAME_CLIENT) $(NAME_SERVER)
 
-$(NAME_CLI): $(OBJS)
+$(NAME_CLIENT): $(OBJS_CLIENT)
 	@$(MAKE) -C $(LIBFT_DIR)
 	@$(MAKE) -C $(PRINTF_DIR)
 	@$(MAKE) -C $(GNL_DIR)
-	@$(CC) $(CFLAGS) $(LINKFLAGS) -o $(NAME_CLI) $(OBJS)
+	@$(CC) $(CFLAGS) $(LINKFLAGS) -o $(NAME_CLIENT) $(OBJS_CLIENT)
+	@echo "$(GREEN)[+] 🧱 $(PROJECT)-$(NAME_CLIENT) compiled$(END)"
 
-$(NAME_SER): $(OBJS)
-	@$(MAKE) -C $(LIBFT_DIR)
-	@$(MAKE) -C $(PRINTF_DIR)
-	@$(MAKE) -C $(GNL_DIR)
-	@$(CC) $(CFLAGS) $(LINKFLAGS) -o $(NAME_SER) $(OBJS)
-	@echo "$(GREEN)[+] 🧱 $(PROJECT) compiled$(END)"
+$(NAME_SERVER): $(OBJS_SERVER)
+	@$(CC) $(CFLAGS) $(LINKFLAGS) -o $(NAME_SERVER) $(OBJS_SERVER)
+	@echo "$(GREEN)[+] 🧱 $(PROJECT)-$(NAME_SERVER) compiled$(END)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -I./$(INCL_DIR) -c $< -o $@
@@ -66,7 +71,8 @@ fclean: clean
 	@$(MAKE) fclean -C $(LIBFT_DIR)
 	@$(MAKE) fclean -C $(PRINTF_DIR)
 	@$(MAKE) fclean -C $(GNL_DIR)
-	@rm -f $(NAME)
+	@rm -f $(NAME_CLIENT)
+	@rm -f $(NAME_SERVER)
 	@echo "$(GREEN)[-]$(END) 🗑  $(PROJECT) deleted"
 
 re: fclean all

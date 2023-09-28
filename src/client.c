@@ -6,51 +6,64 @@
 /*   By: apolo-to <apolo-to@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 10:41:22 by apolo-to          #+#    #+#             */
-/*   Updated: 2023/09/27 16:41:50 by apolo-to         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:51:07 by apolo-to         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 #include "libft.h"
+#include <signal.h>
 
-void	send_str(int pid, char *str)
+/**
+ * This ft send a bit-by-bit message to a server using kill ft.
+ * @param	int pid		: The process id required by kill ft.
+ * @param	char* str	: The message
+*/
+void	send_message(int pid, char *message)
 {
 	int	i;
-	(void)pid;
-	(void)str;
-	while (*str)
+	while (*message != '\0')
 	{
 		i = 8;
-		while (i-- >= 0)
+		while (i >= 0)
 		{
-			if ((*str) >> i & 1)
-				printf("1");
+			i--;
+			if ((*message) >> i & 1)
+				kill(pid, SIGUSR1);
+				// printf("1");
 			else
-				printf("0");
+				kill(pid, SIGUSR2);
+				// printf("0");
+			usleep(50);
 		}
-		printf(" | ");
-		str++;
+		message++;
 	}
-	
-	printf("\n");
-
+	i = 8;
+	while (i >= 0)
+	{
+		i--;
+		kill(pid, SIGUSR2);
+		usleep(50);
+	}
+	printf("Message sent!\n");
 }
 
-
+/**
+ * The main ft checks the arguments and calls send_message ft.
+*/
 int	main(int argc, char **argv)
 {
 	int	pid;
 
 	pid = 0;
-	(void)argv;
 	if (argc != 3)
-		perror_exit(E_PARAMS_NO_VALID);
+		print_error_and_exit(E_PARAMS_NO_VALID);
 	else
 		{
 			pid = ft_atoi(argv[1]);
-			if (!pid)
-				perror_exit(E_PID_INVALID);
-			send_str(pid, argv[2]);
+			if (pid <= 0)
+				print_error_and_exit(E_PID_INVALID);
+			send_message(pid, argv[2]);
 		}
 	return (OK);
 }

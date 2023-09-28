@@ -6,7 +6,7 @@
 /*   By: apolo-to <apolo-to@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 21:13:19 by apolo-to          #+#    #+#             */
-/*   Updated: 2023/09/26 13:19:07 by apolo-to         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:32:52 by apolo-to         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,11 @@ enum e_error{
 	E_PID_INVALID = 2,
 };
 
-void	perror_exit(int type_error);
+typedef struct s_message
+{
+	int	bits;
+	int	pos;
+}t_message;
+
+void	print_error_and_exit(int type_error);
 #endif
