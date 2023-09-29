@@ -6,12 +6,13 @@
 /*   By: apolo-to <apolo-to@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 10:41:22 by apolo-to          #+#    #+#             */
-/*   Updated: 2023/09/28 15:51:07 by apolo-to         ###   ########.fr       */
+/*   Updated: 2023/09/29 09:57:45 by apolo-to         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 #include "libft.h"
+#include "ft_printf.h"
 #include <signal.h>
 
 /**
@@ -19,33 +20,30 @@
  * @param	int pid		: The process id required by kill ft.
  * @param	char* str	: The message
 */
-void	send_message(int pid, char *message)
+static void	send_message(int pid, char *message)
 {
 	int	i;
+
 	while (*message != '\0')
 	{
 		i = 8;
-		while (i >= 0)
+		while (i--)
 		{
-			i--;
-			if ((*message) >> i & 1)
+			if ((*message >> i) & 1)
 				kill(pid, SIGUSR1);
-				// printf("1");
 			else
 				kill(pid, SIGUSR2);
-				// printf("0");
-			usleep(50);
+			usleep(42);
 		}
 		message++;
 	}
 	i = 8;
-	while (i >= 0)
+	while (i--)
 	{
-		i--;
 		kill(pid, SIGUSR2);
-		usleep(50);
+		usleep(42);
 	}
-	printf("Message sent!\n");
+	ft_printf("Message sent!\n");
 }
 
 /**
@@ -59,11 +57,13 @@ int	main(int argc, char **argv)
 	if (argc != 3)
 		print_error_and_exit(E_PARAMS_NO_VALID);
 	else
-		{
-			pid = ft_atoi(argv[1]);
-			if (pid <= 0)
-				print_error_and_exit(E_PID_INVALID);
-			send_message(pid, argv[2]);
-		}
+	{
+		pid = ft_atoi(argv[1]);
+		if (pid <= 0)
+			print_error_and_exit(E_PID_INVALID);
+		if (ft_strlen(argv[2]) == 0)
+			print_error_and_exit(E_EMPTY_MESSAGE);
+		send_message(pid, argv[2]);
+	}
 	return (OK);
 }

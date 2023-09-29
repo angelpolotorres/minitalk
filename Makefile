@@ -18,16 +18,14 @@ SRC_DIR = src
 SRC_FILES_CLIENT = $(addprefix $(SRC_DIR)/, $(SRC_CFILES_CLIENT))
 SRC_CFILES_CLIENT = \
 			client.c \
-			error.c \
+			manage_error.c \
 
 SRC_FILES_SERVER = $(addprefix $(SRC_DIR)/, $(SRC_CFILES_SERVER))
 SRC_CFILES_SERVER = \
 			server.c \
-			error.c \
 
 LIBFT_DIR =$(SRC_DIR)/libft
 PRINTF_DIR =$(SRC_DIR)/printf
-GNL_DIR =$(SRC_DIR)/gnl
 
 # Object files ----------------------------------------------- #
 # ------------------------------------------------------------ #
@@ -39,7 +37,7 @@ OBJS_SERVER = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS_SERVER))
 # ------------------------------------------------------------ #
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
-LINKFLAGS = -L./$(LIBFT_DIR) -lft -L./$(PRINTF_DIR) -lprintf -L./$(GNL_DIR) -lgnl
+LINKFLAGS = -L./$(LIBFT_DIR) -lft -L./$(PRINTF_DIR) -lprintf
 INCL_DIR = includes
 
 # Rules ------------------------------------------------------ #
@@ -49,7 +47,6 @@ all: $(NAME_CLIENT) $(NAME_SERVER)
 $(NAME_CLIENT): $(OBJS_CLIENT)
 	@$(MAKE) -C $(LIBFT_DIR)
 	@$(MAKE) -C $(PRINTF_DIR)
-	@$(MAKE) -C $(GNL_DIR)
 	@$(CC) $(CFLAGS) $(LINKFLAGS) -o $(NAME_CLIENT) $(OBJS_CLIENT)
 	@echo "$(GREEN)[+] 🧱 $(PROJECT)-$(NAME_CLIENT) compiled$(END)"
 
@@ -70,7 +67,6 @@ clean:
 fclean: clean
 	@$(MAKE) fclean -C $(LIBFT_DIR)
 	@$(MAKE) fclean -C $(PRINTF_DIR)
-	@$(MAKE) fclean -C $(GNL_DIR)
 	@rm -f $(NAME_CLIENT)
 	@rm -f $(NAME_SERVER)
 	@echo "$(GREEN)[-]$(END) 🗑  $(PROJECT) deleted"
