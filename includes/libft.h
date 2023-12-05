@@ -6,7 +6,7 @@
 /*   By: apolo-to <apolo-to@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:08:40 by apolo-to          #+#    #+#             */
-/*   Updated: 2023/09/26 08:43:24 by apolo-to         ###   ########.fr       */
+/*   Updated: 2023/09/30 12:49:20 by apolo-to         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,5 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void*), void(*del)(void *));
 // Funciones nuevas
 int		ft_isspace(int c);
 int		ft_intlimits(const char *str);
-int		ft_isposneg(int c);
+int		ft_issign(int c);
 #endif
